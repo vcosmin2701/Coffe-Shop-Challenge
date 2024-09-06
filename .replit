@@ -1,5 +1,5 @@
 entrypoint = "main.swift"
-run = "swiftc -o main *.swift && ./main"
+run = "swiftc main.swift CSVManager.swift  -o main && ./main"
 
 modules = ["swift"]
 
