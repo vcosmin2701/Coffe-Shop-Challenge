@@ -1,5 +1,5 @@
-entrypoint = "main.swift"
-run = "swiftc main.swift CSVManager.swift ECoffeeShop.swift -o main && ./main"
+entrypoint = "run.sh"
+run = "bash run.sh"
 
 modules = ["swift"]
 

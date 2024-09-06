@@ -1,15 +1,11 @@
-let csvURL = "https://raw.githubusercontent.com/Agilefreaks/test_oop/master/coffee_shops.csv"
-let csvManager = CSVManager(csvURL: csvURL)
+if CommandLine.arguments.count > 1 {
+  let argument = CommandLine.arguments[1]
+  let manager = CSVManager(argument: argument)
+  let coffeeShops = manager.loadCoffeeShops()
 
-if let csvData = csvManager.fetchCSV() {
-  print("CSV data fetched successfully.")
-  csvManager.saveCSVToFile(csvData: csvData, fileName: "coffee_shops.csv")
-  
-  let coffeeShops = csvManager.parseCSVData(csvData: csvData)
-  for coffeeShop in coffeeShops {
-    print(coffeeShop, separator: "\n")
+  for shop in coffeeShops {
+      print("Coffee Shop: \(shop.name), Location: (\(shop.xCoordinate), \(shop.yCoordinate))")
   }
-} else {
-  print("Failed to fetch CSV data.")
+}else{
+  print("Please provide a valid URL or local file path.")
 }
-
