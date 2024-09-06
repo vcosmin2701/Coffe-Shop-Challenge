@@ -10,5 +10,5 @@ without waiting for my arguments.
 echo "Please enter a file path or URL:"
 read user_input
 
-swiftc main.swift Utils/CSVManager.swift Models/ECoffeeShop.swift -o main
+swiftc main.swift Services/CSVManager.swift Models/ECoffeeShop.swift -o main
 ./main "$user_input"
