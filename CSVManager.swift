@@ -7,7 +7,7 @@ class CSVManager {
         self.csvURL = csvURL
     }
 
-    private func fetchCSV() -> String? {
+    func fetchCSV() -> String? {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/curl")
         process.arguments = ["-s", csvURL]
@@ -32,7 +32,7 @@ class CSVManager {
         }
     }
 
-    private func saveCSVToFile(csvData: String, fileName: String) {
+    func saveCSVToFile(csvData: String, fileName: String) {
         let resourcesDir = "Resources"
         let fileURL = URL(fileURLWithPath: resourcesDir).appendingPathComponent(fileName)
 
@@ -44,46 +44,33 @@ class CSVManager {
         }
     }
 
-    func getCSVData() {
-        if let csvData = fetchCSV() {
-            print("CSV data fetched successfully.")
-            saveCSVToFile(csvData: csvData, fileName: "coffee_shops.csv")
-        } else {
-            print("Failed to fetch CSV data.")
-        }
-    }
 
     func parseCSVData(csvData: String) -> [ECoffeeShop] {
         var coffeeShops: [ECoffeeShop] = []
-        let rows = csvData.components(separatedBy: "\n")
 
+        let rows = csvData.split(separator: "\n")
+        
         for row in rows {
-            let components = row.components(separatedBy: ",")
-            if components.count == 3 {
-                let name = components[0]
-                if let xCoordinate = Double(components[1]), 
-                   let yCoordinate = Double(components[2]) {
-                    let coffeeShop = ECoffeeShop(name: name, xCoordinate: xCoordinate, yCoordinate: yCoordinate)
-                    coffeeShops.append(coffeeShop)
-                } else {
-                    print("Invalid data format in CSV row: \(row)")
-                }
-            } else {
-                print("Invalid data format in CSV fdsfdfrow: \(row)")
+            let components = row.split(separator: ",")
+
+            guard components.count == 3 else {
+                print("Invalid row format: \(row)")
+                continue
             }
+
+            let name = String(components[0])
+            
+            guard let xCoordinate = Double(components[1]), let yCoordinate = Double(components[2]) else {
+                print("Invalid coordinates in row: \(row)")
+                continue
+            }
+            
+            let coffeeShop = ECoffeeShop(name: name, xCoordinate: xCoordinate, yCoordinate: yCoordinate)
+            coffeeShops.append(coffeeShop)
         }
+
         return coffeeShops
     }
 }
 
-public struct ECoffeeShop {
-  let name: String
-  let xCoordinate: Double
-  let yCoordinate: Double
 
-  public init(name: String, xCoordinate: Double, yCoordinate: Double) {
-      self.name = name
-      self.xCoordinate = xCoordinate
-      self.yCoordinate = yCoordinate
-  }
-}

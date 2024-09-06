@@ -1,7 +1,15 @@
 let csvURL = "https://raw.githubusercontent.com/Agilefreaks/test_oop/master/coffee_shops.csv"
 let csvManager = CSVManager(csvURL: csvURL)
 
-csvManager.getCSVData()
+if let csvData = csvManager.fetchCSV() {
+  print("CSV data fetched successfully.")
+  csvManager.saveCSVToFile(csvData: csvData, fileName: "coffee_shops.csv")
+  
+  let coffeeShops = csvManager.parseCSVData(csvData: csvData)
+  for coffeeShop in coffeeShops {
+    print(coffeeShop, separator: "\n")
+  }
+} else {
+  print("Failed to fetch CSV data.")
+}
 
-let coffeeShops = csvManager.parseCSVData(csvData: "Resources/coffe_shops.csv")
-print(coffeeShops)
