@@ -1,4 +1,5 @@
-entrypoint = "main.swift"
+entrypoint = "run.sh"
+run = "bash run.sh"
 
 modules = ["swift"]
 
