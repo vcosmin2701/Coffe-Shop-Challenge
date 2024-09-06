@@ -1,4 +1,5 @@
 entrypoint = "main.swift"
+run = "swiftc -o main *.swift && ./main"
 
 modules = ["swift"]
 
