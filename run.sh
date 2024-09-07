@@ -7,7 +7,7 @@ it automatically executed the whole program
 without waiting for my arguments.
 '
 
-read user_input
+read -r user_x user_y coffee_shops_file
 
 swiftc main.swift Services/*.swift Models/*.swift -o main
-./main "$user_input"
+./main "$user_x" "$user_y" "$coffee_shops_file"

@@ -1,4 +1,4 @@
-struct EUser: Coordinate {
+struct EUser {
   let xCoordinate: Double
   let yCoordinate: Double
 }

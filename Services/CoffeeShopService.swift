@@ -1,7 +1,7 @@
 class CoffeeShopService {
   private let distanceCalculator = DistanceCalculator()
 
-  func findClosestCoffeeShop(user: Coordinate, coffeeShops: [ECoffeeShop]) -> [EDistance]{
+  func findClosestCoffeeShop(user: EUser, coffeeShops: [ECoffeeShop]) -> [EDistance]{
     let distances = coffeeShops.map {shop -> EDistance in
       let distance = distanceCalculator.calculateDistante(user: user, shop: shop)
       return EDistance(name: shop.name, distance: distance)

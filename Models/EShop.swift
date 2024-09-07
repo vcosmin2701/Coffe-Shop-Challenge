@@ -1,4 +1,4 @@
-struct EShop: Coordinate {
+struct EShop {
   let xCoordinate: Double
   let yCoordinate: Double
 }
