@@ -26,13 +26,7 @@ class App {
 
       let closestCoffeeShops = coffeeShopService.findClosestCoffeeShop(user: user, coffeeShops: coffeeShops)
 
-      for shop in coffeeShops {
-          print("Coffee Shop: \(shop.name), Location: (\(shop.xCoordinate), \(shop.yCoordinate))")
-      }
-
-      for shop in closestCoffeeShops {
-          print("\(shop.name),\(shop.distance.rounded(toPlaces: 4))")
-      }
+      PrintHelper.printClosestCoffeeShops(closestCoffeeShops: closestCoffeeShops)
   }
 }
 
