@@ -9,5 +9,5 @@ without waiting for my arguments.
 
 read -r user_x user_y coffee_shops_file
 
-swiftc main.swift Services/*.swift Models/*.swift Factories/*.swift -o main
+swiftc main.swift App.swift Services/*.swift Models/*.swift Factories/*.swift -o main
 ./main "$user_x" "$user_y" "$coffee_shops_file"
