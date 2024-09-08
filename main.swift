@@ -1,12 +1,12 @@
 import Foundation
 
 if CommandLine.arguments.count == 4 {
-  print("Arguments: \(CommandLine.arguments)") // Add this line for debugging
+  print("Arguments: \(CommandLine.arguments)")
   if let userXCoordinate = Double(CommandLine.arguments[1]),
      let userYCoordinate = Double(CommandLine.arguments[2]) {
 
       let filePath = CommandLine.arguments[3]
-      let user = EUser(xCoordinate: userXCoordinate, yCoordinate: userYCoordinate)
+      let user = EUserFactory.createUser(xCoordinate: userXCoordinate, yCoordinate: userYCoordinate)
       let manager = CSVManager(argument: filePath)
       let coffeeShops = manager.loadCoffeeShops()
 
