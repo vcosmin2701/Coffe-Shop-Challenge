@@ -2,33 +2,40 @@ import Foundation
 
 class CSVManager {
     private let csvURL: String?
-    private let localFileName: String = "coffee_shops.csv"
+    private let csvFilePath: String?
     private let resourcesDir: String = "Resources"
 
     init(argument: String) {
         if argument.starts(with: "http") {
             self.csvURL = argument
+            self.csvFilePath = nil
         } else {
             self.csvURL = nil
+            self.csvFilePath = argument
         }
     }
 
     func loadCoffeeShops() -> [ECoffeeShop] {
-        let fileURL = URL(fileURLWithPath: resourcesDir).appendingPathComponent(localFileName)
-
-        if FileManager.default.fileExists(atPath: fileURL.path) {
-            print("Local file found: \(fileURL.path). Parsing the local file.")
-            guard let csvData = try? String(contentsOfFile: fileURL.path, encoding: .utf8) else {
-                print("Failed to read local file.")
+        if let csvFilePath = csvFilePath {
+            let fileURL = URL(fileURLWithPath: resourcesDir).appendingPathComponent(csvFilePath)
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                print("Local file found: \(fileURL.path). Parsing the local file.")
+                guard let csvData = try? String(contentsOfFile: fileURL.path, encoding: .utf8) else {
+                    print("Failed to read local file.")
+                    return []
+                }
+                return parseCSVData(csvData: csvData)
+            } else {
+                print("Local file not found at path: \(fileURL.path).")
                 return []
             }
-            return parseCSVData(csvData: csvData)
         } else if let csvURL = csvURL {
             print("Fetching data from the URL: \(csvURL).")
             guard let csvData = fetchCSV() else {
                 print("Failed to fetch CSV data.")
                 return []
             }
+            let fileURL = URL(fileURLWithPath: resourcesDir).appendingPathComponent("coffee_shops.csv")
             saveCSVToFile(csvData: csvData, fileURL: fileURL)
             return parseCSVData(csvData: csvData)
         } else {
@@ -65,13 +72,9 @@ class CSVManager {
 
     private func saveCSVToFile(csvData: String, fileURL: URL) {
         do {
-            let directoryURL = URL(fileURLWithPath: resourcesDir)
-            if !FileManager.default.fileExists(atPath: directoryURL.path) {
-                try FileManager.default.createDirectory(at: directoryURL, withIntermediateDirectories: true, attributes: nil)
-            }
-
+            try FileManager.default.createDirectory(atPath: resourcesDir, withIntermediateDirectories: true, attributes: nil)
             try csvData.write(to: fileURL, atomically: true, encoding: .utf8)
-            print("CSV data saved to \(fileURL.path).")
+            print("CSV data saved to file: \(fileURL.path).")
         } catch {
             print("Error saving CSV data to file: \(error)")
         }
@@ -80,25 +83,15 @@ class CSVManager {
     private func parseCSVData(csvData: String) -> [ECoffeeShop] {
         var coffeeShops: [ECoffeeShop] = []
         let rows = csvData.split(separator: "\n")
-
         for row in rows {
-            let components = row.split(separator: ",")
-
-            guard components.count == 3 else {
-                print("Invalid row format: \(row)")
-                continue
+            let columns = row.split(separator: ",")
+            if columns.count == 3,
+               let xCoordinate = Double(columns[1]),
+               let yCoordinate = Double(columns[2]) {
+                let coffeeShop = ECoffeeShop(name: String(columns[0]), xCoordinate: xCoordinate, yCoordinate: yCoordinate)
+                coffeeShops.append(coffeeShop)
             }
-
-            let name = String(components[0])
-            guard let xCoordinate = Double(components[1]), let yCoordinate = Double(components[2]) else {
-                print("Invalid coordinates in row: \(row)")
-                continue
-            }
-
-            let coffeeShop = ECoffeeShop(name: name, xCoordinate: xCoordinate, yCoordinate: yCoordinate)
-            coffeeShops.append(coffeeShop)
         }
-
         return coffeeShops
     }
 }
