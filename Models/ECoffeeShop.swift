@@ -1,3 +1,4 @@
+// custom type used for the csv parsing
 public struct ECoffeeShop {
   let name: String
   let xCoordinate: Double

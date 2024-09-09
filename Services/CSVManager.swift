@@ -15,6 +15,10 @@ class CSVManager {
         }
     }
 
+    // if the user decides to use a local file, if exists will load coffee shops from it
+    // if an URL is provided, will try to download the file from the URL, store it in the Resources folder and load it
+    // the file will be overriden if it already exists
+    
     func loadCoffeeShops() -> [ECoffeeShop] {
         if let csvFilePath = csvFilePath {
             let fileURL = URL(fileURLWithPath: resourcesDir).appendingPathComponent(csvFilePath)
@@ -50,6 +54,7 @@ class CSVManager {
         process.executableURL = URL(fileURLWithPath: "/usr/bin/curl")
         process.arguments = ["-s", csvURL]
 
+        // using the pipe to capture the output of the curl command
         let pipe = Pipe()
         process.standardOutput = pipe
 
